@@ -1,8 +1,6 @@
 # CÓMO CREAR UN SERVIDOR DEDICADO PARA BLACK MESA | DEATHMATCH & COOPERATIVO
 
-![Jeremias Banner](IMG/BM1.webp)
-![Jeremias Banner](IMG/BN2.png)
-
+![Jeremias Banner](https://raw.githubusercontent.com/Jeremias0618/NextLevelGaming/refs/heads/main/IMG/BM2.png)
 
 ### REQUISITOS PREVIOS
 
