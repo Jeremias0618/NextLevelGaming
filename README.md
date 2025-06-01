@@ -11,8 +11,18 @@
 
 <p align="center">
   <img src="https://img.shields.io/badge/Estado-Activo-brightgreen?style=flat-square"/>
-  <img src="https://img.shields.io/github/last-commit/Jeremias0618/NextLevelGaming?style=flat-square"/>
-  <img src="https://komarev.com/ghpvc/?username=Jeremias0618&label=Profile%20views&color=0e75b6&style=flat"/>
+  <img src="https://visitor-badge.laobi.icu/badge?page_id=Jeremias0618.NextLevelGaming"/>
+  <br/>
+  <a href="https://www.youtube.com/@DarkAriaz" target="_blank">
+    <img src="https://img.shields.io/youtube/channel/subscribers/UCYN5na2hancGElDwpJlKYlA" alt="YouTube Channel Subscribers"/>
+  </a>
+  <a href="https://www.twitch.tv/darkariagaming" target="_blank">
+    <img src="https://img.shields.io/twitch/status/darkariagaming?style=social" alt="Twitch Status"/>
+  </a>
+  <a href="https://github.com/Jeremias0618" target="_blank">
+    <img src="https://img.shields.io/github/followers/Jeremias0618?style=social" alt="GitHub followers"/>
+  </a>
+  <img src="https://discordapp.com/api/guilds/1085346819707506748/widget.png?style=shield" alt="Discord Shield"/>
 </p>
 
 ---
