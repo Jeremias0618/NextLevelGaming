@@ -12,7 +12,7 @@
 <p align="center">
   <img src="https://img.shields.io/badge/Estado-Activo-brightgreen?style=flat-square"/>
   <img src="https://img.shields.io/github/last-commit/Jeremias0618/NextLevelGaming?style=flat-square"/>
-  <img src="https://img.shields.io/github/license/Jeremias0618/NextLevelGaming?style=flat-square"/>
+  <img src="https://komarev.com/ghpvc/?username=Jeremias0618&label=Profile%20views&color=0e75b6&style=flat"/>
 </p>
 
 ---
