@@ -16,6 +16,8 @@ Esto permitirá que otros jugadores puedan conectarse a tu servidor.
 
 ### DESCARGAR LA HERRAMIENTA "BLACK MESA DEDICATED SERVER"
 
+![Jeremias Banner](https://img.asmedia.epimg.net/resizer/v2/6RHZLXMFB5PB5NR5DYCD67EU5E.jpg?auth=2736aee51ece7c8aa38e73221edd0d209e151a721782e154385e621ed228aaa6&width=1472&height=828&smart=true)
+
 1. Descarga la herramienta desde Steam: **Black Mesa Dedicated Server**
 2. Una vez instalada, dirígete a la ruta donde se encuentra el archivo `srcds.exe`.
 3. Configura `srcds.exe` para que siempre se ejecute como administrador.
@@ -85,6 +87,9 @@ srcds.exe                 // Ejecuta el servidor dedicado
 -port 27015               // Puerto por defecto del servidor
 ```
 
+▶ [Mapas para Deathmactch - Steam Guide](https://steamcommunity.com/sharedfiles/filedetails/?id=3491463188)
+
+
 ---
 
 ### MAPAS DISPONIBLES PARA DEATHMATCH
@@ -94,6 +99,77 @@ dm_crossfire    dm_gasworks    dm_stalkyard    dm_lambdabunker
 dm_chopper      dm_bounce      dm_power        dm_boot_camp
 dm_longjump     dm_office      dm_rail         dm_dynamo
 dm_chthon       dm_metal       dm_stack        dm_subway
+```
+
+---
+
+### SERVIDOR DEDICADO PARA COOPERATIVO
+
+![Jeremias Banner](https://images.steamusercontent.com/ugc/12701383930820911281/4F631948D855EFB726C396F69D26453731C85494/)
+
+En este caso, para crear un servidor dedicado para Cooperativo, tendrás que descargar el siguiente archivo:
+
+▶ [Descargar archivo cooperativo](https://drive.google.com/file/d/1xpH9AwMbcAcT3uHPDHW_VSspAyXxIXHv/view?usp=sharing)
+
+Una vez descargado, deberán ir a la carpeta donde instalaron su juego y dirigirse a la siguiente ubicación:
+
+```
+Black Mesa Dedicated Server\bms
+```
+
+Dentro de esa carpeta, extraigan el archivo comprimido que descargaron.
+
+Luego, debemos configurar el archivo principal del servidor. Dirígete a la ruta:
+
+```
+Black Mesa Dedicated Server\bms\cfg
+```
+
+Dentro de la carpeta `cfg`, busca el archivo llamado `server.cfg` y ábrelo con un editor de texto.
+
+Configura los siguientes parámetros básicos del servidor (puedes modificarlos a tu gusto):
+
+```
+// Black Mesa server.cfg file
+hostname "Yeremi Server - Black Mesa"     // Nombre del servidor visible para los jugadores
+rcon_password "admin123"                  // Contraseña RCON (administración remota)
+sv_password ""                            // Contraseña de acceso (vacío = acceso libre)
+sv_lan 0                                  // 0 = online, 1 = LAN
+sv_cheats 0                               // 0 = sin trucos
+mp_friendlyfire 1                         // Daño entre compañeros activado
+sv_region 255                             // 255 = automático (global)
+```
+
+Guarda los cambios antes de cerrar el archivo.
+
+▶ [Mapas del modo historia - Steam Guide](https://steamcommunity.com/sharedfiles/filedetails/?id=3491463188)
+
+
+Ahora abre la terminal de comandos CMD en Windows. Navega hasta la carpeta donde está instalada la herramienta con el siguiente comando:
+
+```
+cd "C:\Program Files (x86)\Steam\steamapps\common\Black Mesa Dedicated Server"
+```
+
+⚠️ *Recuerda que la ruta puede variar dependiendo de dónde hayas instalado Steam.*
+
+Luego, ejecuta el siguiente comando para iniciar el servidor cooperativo:
+
+```
+srcds.exe -console -game bms +ip 192.168.1.107 +maxplayers 10 +mp_teamplay 1 +exec server.cfg +map bm_c4a1a
+```
+
+#### DETALLE DE CADA PARÁMETRO
+
+```
+srcds.exe                   // Ejecuta el servidor dedicado  
+-console                    // Inicia en modo consola  
+-game bms                   // Especifica el juego Black Mesa  
++ip tu_ip_local             // Asigna la IP local del servidor  
++map mapa_inicial           // Establece el mapa inicial (ej. bm_c4a1a / Xen)  
++maxplayers número          // Define el número máximo de jugadores  
++mp_teamplay 1              // Activa el modo cooperativo por equipos  
++exec server.cfg            // Ejecuta la configuración personalizada del servidor  
 ```
 
 ---
