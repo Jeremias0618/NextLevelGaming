@@ -205,16 +205,17 @@ Si tu servidor no tiene contraseña, podría aparecer automáticamente en la lis
 ### COMANDOS ÚTILES PARA LA CONSOLA DEL SERVIDOR
 
 ```
-status                          // Muestra información del servidor
-changelevel nombre_del_mapa     // Cambia al mapa indicado sin reiniciar
-kick nombre_del_jugador         // Expulsa a un jugador
-addip 0 ip_del_jugador          // Banea una IP
-banid 0 steamid64               // Banea por SteamID
-removeip ip_del_jugador         // Quita el baneo por IP
-removeid steamid64              // Quita el baneo por SteamID
-hostname "Nuevo Nombre"         // Cambia el nombre del servidor en tiempo real
-sv_password "clave"             // Establece una contraseña para entrar
-sv_password ""                  // Elimina la contraseña
-mp_timelimit minutos            // Establece duración del mapa en minutos
-mp_falldamage 1                 // Activa daño realista por caída
+status                       // Ver información del servidor  
+changelevel mapa             // Cambia de mapa  
+kick nombre_jugador          // Expulsar jugador  
+addip 0 ip_del_jugador       // Banear IP  
+banid 0 steamid64            // Banear SteamID  
+removeip ip                  // Desbanear IP  
+removeid steamid64           // Desbanear SteamID  
+hostname "Nuevo nombre"      // Cambiar nombre del servidor  
+sv_password "clave"          // Establecer contraseña  
+sv_password ""               // Quitar contraseña  
+mp_timelimit minutos         // Duración del mapa  
+mp_falldamage 1              // Activar daño por caída realista  
+mp_friendlyfire 1            // Daño entre compañeros activado  
 ```
