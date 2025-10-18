@@ -113,24 +113,24 @@ enable-rcon=false
 
 ### Configuración Básica del Servidor
 ```properties
-# Nombre del servidor (no afecta la funcionalidad)
-server-name=Mi Servidor Minecraft
-
 # Mensaje del día (MOTD) - aparece en la lista de servidores
-motd=¡Bienvenido a mi servidor!
+motd=A Minecraft Server
 
 # Puerto del servidor (por defecto 25565)
 server-port=25565
 
 # Número máximo de jugadores conectados simultáneamente
 max-players=20
+
+# IP del servidor (dejar vacío para todas las interfaces)
+server-ip=
 ```
 
 ### Configuración de Juego
 ```properties
 # Dificultad del juego
 # Valores: peaceful, easy, normal, hard
-difficulty=normal
+difficulty=easy
 
 # Modo de juego por defecto para nuevos jugadores
 # Valores: survival, creative, adventure, spectator
@@ -140,14 +140,14 @@ gamemode=survival
 # true = hardcore, false = normal
 hardcore=false
 
-# Si los jugadores pueden atacarse entre sí
-pvp=true
-
 # Si los jugadores pueden volar (modo creativo)
 allow-flight=false
 
 # Si se fuerza el modo de juego especificado
 force-gamemode=false
+
+# Si se generan estructuras (aldeas, fortalezas, etc.)
+generate-structures=true
 ```
 
 ### Configuración de Red y Seguridad
@@ -166,6 +166,12 @@ enforce-whitelist=false
 # Límite de conexiones por segundo por IP
 # 0 = sin límite
 rate-limit=0
+
+# Si se previenen conexiones a través de proxy
+prevent-proxy-connections=false
+
+# Si se registran las IPs de los jugadores
+log-ips=true
 ```
 
 ### Configuración de Mundo
@@ -183,28 +189,24 @@ level-type=minecraft:normal
 # Configuración personalizada del generador (JSON)
 generator-settings={}
 
-# Si se permite el acceso al Nether
-allow-nether=true
-
-# Formato de guardado del mundo
-# Valores: default, legacy
-level-format=default
+# Tamaño máximo del mundo en bloques
+max-world-size=29999984
 ```
 
-### Configuración de Spawn y Mobs
+### Configuración de Spawn y Protección
 ```properties
-# Si aparecen NPCs (aldeanos, etc.)
-spawn-npcs=true
-
-# Si aparecen animales
-spawn-animals=true
-
-# Si aparecen monstruos
-spawn-monsters=true
-
-# Coordenadas del spawn del mundo (x,y,z)
-# Dejar vacío para usar el spawn por defecto
+# Radio de protección del spawn (en bloques)
+# 0 = sin protección, 16 = protección de 16 bloques
 spawn-protection=16
+
+# Si se ocultan jugadores en línea
+hide-online-players=false
+
+# Tiempo de pausa cuando no hay jugadores (segundos)
+pause-when-empty-seconds=60
+
+# Tiempo de inactividad antes de kickear jugador (0 = deshabilitado)
+player-idle-timeout=0
 ```
 
 ### Configuración de Comandos y Permisos
@@ -233,6 +235,15 @@ rcon.port=25575
 rcon.password=
 ```
 
+### Configuración de Query
+```properties
+# Puerto para consultas de estado
+query.port=25565
+
+# Habilitar consultas de estado
+enable-query=false
+```
+
 ### Configuración de Rendimiento
 ```properties
 # Tiempo máximo por tick en milisegundos
@@ -246,9 +257,23 @@ sync-chunk-writes=true
 # Valores: 4-32, menor = mejor rendimiento
 simulation-distance=10
 
+# Distancia de renderizado (chunks)
+# Valores: 3-32, menor = mejor rendimiento
+view-distance=10
+
 # Porcentaje del rango de transmisión de entidades
 # 100 = rango completo, menor = mejor rendimiento
 entity-broadcast-range-percentage=100
+
+# Número máximo de actualizaciones de vecinos encadenados
+max-chained-neighbor-updates=1000000
+
+# Si se usa transporte nativo
+use-native-transport=true
+
+# Umbral de compresión de red (bytes)
+# Paquetes más grandes que este valor se comprimen
+network-compression-threshold=256
 ```
 
 ### Configuración de Monitoreo
@@ -256,20 +281,23 @@ entity-broadcast-range-percentage=100
 # Habilitar monitoreo JMX
 enable-jmx-monitoring=false
 
-# Habilitar consultas de estado
-enable-query=false
-
 # Habilitar estado del servidor
 enable-status=true
 
 # Si se envían datos de uso a Mojang
 snooper-enabled=true
+
+# Intervalo de latido de estado (0 = deshabilitado)
+status-heartbeat-interval=0
 ```
 
 ### Configuración de Chat y Mensajes
 ```properties
 # Si se transmiten mensajes de consola a operadores
 broadcast-console-to-ops=true
+
+# Si se transmiten mensajes RCON a operadores
+broadcast-rcon-to-ops=true
 
 # Si se envía feedback de comandos
 send-command-feedback=true
@@ -283,58 +311,127 @@ resource-pack=
 # Hash SHA1 del resource pack (opcional)
 resource-pack-sha1=
 
-# Nivel de compresión del pack (1-9)
-pack-compression-level=3
+# ID del resource pack (opcional)
+resource-pack-id=
+
+# Mensaje de prompt del resource pack
+resource-pack-prompt=
 
 # Si se requiere el resource pack
 require-resource-pack=false
+
+# Nivel de compresión del pack (1-9)
+pack-compression-level=3
 ```
 
-### Configuración de Redstone
+### Configuración de Gestión de Servidor
 ```properties
-# Si se procesan las actualizaciones de redstone
-# false puede mejorar rendimiento pero rompe redstone
-redstone-enabled=true
+# Si se aceptan transferencias
+accepts-transfers=false
+
+# Habilitar servidor de gestión
+management-server-enabled=false
+
+# Host del servidor de gestión
+management-server-host=localhost
+
+# Puerto del servidor de gestión
+management-server-port=0
+
+# Secreto del servidor de gestión
+management-server-secret=G8D2BbquPLgf4n7luB10xg7PKpzPqFy2aWSw4gFF
+
+# Habilitar TLS en servidor de gestión
+management-server-tls-enabled=true
+
+# Almacén de claves TLS
+management-server-tls-keystore=
+
+# Contraseña del almacén de claves TLS
+management-server-tls-keystore-password=
+```
+
+### Configuración de Código de Conducta
+```properties
+# Habilitar código de conducta
+enable-code-of-conduct=false
+```
+
+### Configuración de Perfil Seguro
+```properties
+# Forzar perfil seguro
+enforce-secure-profile=true
+```
+
+### Configuración de Packs de Datos
+```properties
+# Packs de datos iniciales deshabilitados
+initial-disabled-packs=
+
+# Packs de datos iniciales habilitados
+initial-enabled-packs=vanilla
+```
+
+### Configuración de Compresión de Regiones
+```properties
+# Algoritmo de compresión de archivos de región
+# Valores: deflate, lz4, none
+region-file-compression=deflate
+```
+
+### Configuración de Filtrado de Texto
+```properties
+# Configuración de filtrado de texto
+text-filtering-config=
+
+# Versión de filtrado de texto
+text-filtering-version=0
+```
+
+### Configuración de Enlaces
+```properties
+# Enlace para reportar bugs
+bug-report-link=
 ```
 
 ### Ejemplo de Configuración Completa
 ```properties
 # Configuración básica
-server-name=Mi Servidor Minecraft
-motd=¡Bienvenido a mi servidor!
+motd=A Minecraft Server
 server-port=25565
+server-ip=
 max-players=20
 
 # Configuración de juego
-difficulty=normal
+difficulty=easy
 gamemode=survival
 hardcore=false
-pvp=true
 allow-flight=false
 force-gamemode=false
+generate-structures=true
 
-# Configuración de red
+# Configuración de red y seguridad
 online-mode=true
 white-list=false
 enforce-whitelist=false
 rate-limit=0
+prevent-proxy-connections=false
+log-ips=true
 
 # Configuración de mundo
 level-name=world
 level-seed=
 level-type=minecraft:normal
 generator-settings={}
-allow-nether=true
-level-format=default
+max-world-size=29999984
 
-# Configuración de spawn
-spawn-npcs=true
-spawn-animals=true
-spawn-monsters=true
+# Configuración de spawn y protección
 spawn-protection=16
+hide-online-players=false
+pause-when-empty-seconds=60
+player-idle-timeout=0
 
-# Configuración de comandos
-enable-command-block=false
+# Configuración de comandos y permisos
 op-permission-level=4
 function-permission-level=2
 
@@ -343,30 +440,65 @@ enable-rcon=false
 rcon.port=25575
 rcon.password=
 
+# Configuración de Query
+query.port=25565
+enable-query=false
+
 # Configuración de rendimiento
 max-tick-time=60000
 sync-chunk-writes=true
 simulation-distance=10
+view-distance=10
 entity-broadcast-range-percentage=100
+max-chained-neighbor-updates=1000000
+use-native-transport=true
+network-compression-threshold=256
 
 # Configuración de monitoreo
 enable-jmx-monitoring=false
-enable-query=false
 enable-status=true
-snooper-enabled=true
+status-heartbeat-interval=0
 
-# Configuración de chat
+# Configuración de chat y mensajes
 broadcast-console-to-ops=true
-send-command-feedback=true
+broadcast-rcon-to-ops=true
 
 # Configuración de resource packs
 resource-pack=
 resource-pack-sha1=
-pack-compression-level=3
+resource-pack-id=
+resource-pack-prompt=
 require-resource-pack=false
 
-# Configuración de redstone
-redstone-enabled=true
+# Configuración de gestión de servidor
+accepts-transfers=false
+management-server-enabled=false
+management-server-host=localhost
+management-server-port=0
+management-server-secret=VUw7hKtVTUJdEq5usVgyAE6aMQDcTNtvBHAn5ko9
+management-server-tls-enabled=true
+management-server-tls-keystore=
+management-server-tls-keystore-password=
+
+# Configuración de código de conducta
+enable-code-of-conduct=false
+
+# Configuración de perfil seguro
+enforce-secure-profile=true
+
+# Configuración de packs de datos
+initial-disabled-packs=
+initial-enabled-packs=vanilla
+
+# Configuración de compresión de regiones
+region-file-compression=deflate
+
+# Configuración de filtrado de texto
+text-filtering-config=
+text-filtering-version=0
+
+# Configuración de enlaces
+bug-report-link=
 ```
 
 ### Consejos de Configuración
