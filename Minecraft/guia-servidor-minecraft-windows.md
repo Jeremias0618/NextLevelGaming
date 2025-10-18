@@ -1,510 +1,326 @@
-# CÓMO CREAR UN SERVIDOR DEDICADO PARA MINECRAFT JAVA | WINDOWS
+# Guía: Crear un **Servidor Minecraft Java** en Windows
 
 ![Minecraft Banner](/IMG/minecraft-background-cfljc4haleghnajo.jpg)
 
-### TABLA DE CONTENIDOS
-1. [Requisitos del Sistema](#requisitos-del-sistema)
-2. [Instalación de Java](#instalación-de-java)
-3. [Descarga del Servidor](#descarga-del-servidor)
-4. [Configuración Inicial](#configuración-inicial)
-5. [Configuración del Firewall](#configuración-del-firewall)
-6. [Configuración Avanzada del Servidor](#configuración-avanzada-del-servidor)
-7. [Comandos de Administración](#comandos-de-administración)
-8. [Gestión de Jugadores](#gestión-de-jugadores)
-9. [Configuración de Whitelist y Blacklist](#configuración-de-whitelist-y-blacklist)
-10. [Solución de Problemas](#solución-de-problemas)
+> Esta guía en **Markdown** te explica paso a paso cómo montar un servidor Minecraft Java en Windows, cómo iniciarlo, archivos importantes y todos los comandos y opciones para **whitelist**, **IP permitida (firewall)**, **ban**, **kick**, **ops**, y medidas básicas de seguridad. Incluye ejemplos de `.bat` / PowerShell.
 
 ---
 
-### REQUISITOS PREVIOS
+## Índice
 
-**Mínimos:**
-- **RAM**: 2GB (recomendado 4GB+)
-- **CPU**: Procesador de 2 núcleos
-- **Espacio en disco**: 1GB libre
-- **Sistema Operativo**: Windows 10/11 o Windows Server 2016+
-
-**Recomendados:**
-- **RAM**: 8GB o más
-- **CPU**: Procesador de 4+ núcleos
-- **Espacio en disco**: 10GB+ libre
-- **Conexión a Internet**: Estable con buen ancho de banda
-
----
-
-### INSTALACIÓN DE JAVA
-
-### 1. Verificar Java Instalado
-```cmd
-java -version
-```
-
-### 2. Descargar Java (si no está instalado)
-1. Ve a [Oracle Java](https://www.oracle.com/java/technologies/downloads/) o [OpenJDK](https://adoptium.net/)
-2. Descarga Java 17 o superior (recomendado Java 21)
-3. Instala siguiendo el asistente
-
-### 3. Configurar Variables de Entorno
-1. Abre "Variables de entorno del sistema"
-2. Agrega `JAVA_HOME` apuntando a la carpeta de Java
-3. Agrega `%JAVA_HOME%\bin` al PATH
+1. Requisitos previos
+2. Descargar Java y el servidor
+3. Preparar la carpeta del servidor
+4. Primer arranque (EULA)
+5. Archivos importantes y `server.properties`
+6. Scripts de inicio (Windows `.bat` y PowerShell)
+7. Abrir puerto en Windows Firewall y permitir IPs específicas
+8. Comandos de consola / juego (vanilla)
+9. Gestión de whitelist
+10. Ban / Kick / IP Ban
+11. Operators (ops) y permisos
+12. Plugins útiles (opcional)
+13. Copias de seguridad y mantenimiento
+14. Ejemplos prácticos y atajos útiles
 
 ---
 
-### DESCARGA DEL SERVIDOR
+## 1) Requisitos previos
 
-### 1. Crear Carpeta del Servidor
-```cmd
-mkdir C:\MinecraftServer
-cd C:\MinecraftServer
+* Windows 10/11 o Windows Server (64-bit recomendable).
+* Java 17+ (o la versión recomendada por la versión de servidor que uses). Desde 1.18+ se recomienda Java 17; versiones recientes pueden requerir Java 17/20/21 según la build.
+* Conexión a Internet y control del router (si quieres que sea accesible desde fuera de tu red local).
+* Puerto por defecto: `25565` (TCP).
+
+## 2) Descargar Java y el servidor
+
+1. Instala Java (OpenJDK o Oracle JDK). Ejemplo: OpenJDK 17.
+2. Descarga el `server.jar` oficial de minecraft.net (o usa Paper/Spigot para mejores prestaciones si quieres plugins).
+
+Guarda el `.jar` dentro de una carpeta dedicada, por ejemplo `C:\mc-server\`.
+
+## 3) Preparar la carpeta del servidor
+
+Crea `C:\mc-server\` y coloca `server.jar` allí. Desde PowerShell (ejemplo):
+
+```powershell
+mkdir C:\mc-server
+cd C:\mc-server
+# mover/pegar el server.jar aquí
 ```
 
-### 2. Descargar Server.jar
-```cmd
-# Opción 1: Descarga directa (reemplaza VERSION con la versión deseada)
-curl -o server.jar https://launcher.mojang.com/v1/objects/[HASH]/server.jar
+## 4) Primer arranque (aceptar EULA)
 
-# Opción 2: Usar PowerShell
-Invoke-WebRequest -Uri "https://launcher.mojang.com/v1/objects/[HASH]/server.jar" -OutFile "server.jar"
+Ejecuta desde la carpeta:
+
+```powershell
+java -Xmx1G -Xms1G -jar server.jar nogui
 ```
 
-### 3. Primera Ejecución
-```cmd
-java -Xmx2G -Xms1G -jar server.jar nogui
-```
+Al primer arranque saldrá un archivo `eula.txt`. Ábrelo y cambia `eula=false` a `eula=true` para aceptar el EULA.
 
----
-
-### CONFIGURACIÓN INICIAL
-
-### 1. Aceptar EULA
-Edita `eula.txt` y cambia:
-```
-eula=false
-```
-Por:
-```
+```text
+# eula.txt
+# Debes aceptar cambiando a true
 eula=true
 ```
 
-### 2. Configurar server.properties
-```properties
-# Configuración básica
-server-name=Mi Servidor Minecraft
-motd=¡Bienvenido a mi servidor!
+Vuelve a ejecutar el comando de Java para que genere los mundos y archivos.
+
+## 5) Archivos importantes
+
+* `server.properties` — configuración del servidor (puerto, modo de juego, dificultad, whitelist, etc.).
+* `ops.json` — lista de operadores (ops).
+* `whitelist.json` — lista de jugadores permitidos cuando `white-list=true`.
+* `banned-players.json` — jugadores baneados por nombre/UUID.
+* `banned-ips.json` — IPs baneadas.
+* `logs` — logs del servidor.
+
+Algunos ajustes útiles en `server.properties`:
+
+```
 server-port=25565
-max-players=20
-difficulty=normal
-gamemode=survival
-hardcore=false
-pvp=true
-allow-flight=false
 online-mode=true
-white-list=false
-enforce-whitelist=false
-enable-command-block=false
-enable-query=false
-enable-rcon=false
+white-list=false   # true = solo jugadores en whitelist pueden entrar
+motd=Servidor de Ejemplo
+max-players=20
+view-distance=10
 ```
 
-### 3. Script de Inicio (start.bat)
-```batch
+## 6) Scripts de inicio (Windows)
+
+**Ejemplo `start-server.bat`** (doble clic para iniciar):
+
+```bat
 @echo off
-title Servidor Minecraft
-java -Xmx4G -Xms2G -XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=200 -XX:+UnlockExperimentalVMOptions -XX:+DisableExplicitGC -XX:+AlwaysPreTouch -XX:G1NewSizePercent=30 -XX:G1MaxNewSizePercent=40 -XX:G1HeapRegionSize=8M -XX:G1ReservePercent=20 -XX:G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=5 -XX:SurvivorRatio=32 -XX:+PerfDisableSharedMem -XX:MaxTenuringThreshold=1 -Dusing.aikars.flags=https://mcflags.emc.gs -Daikars.new.flags=true -jar server.jar nogui
+cd /d %~dp0
+REM Ajusta la memoria según tu equipo
+java -Xms1G -Xmx4G -jar server.jar nogui
 pause
 ```
 
----
+**Ejemplo PowerShell (`start-server.ps1`)** (ejecutar con PowerShell):
 
-### CONFIGURACIÓN DEL FIREWALL
-
-### 1. Abrir Puerto en Windows Firewall
-```cmd
-# Abrir puerto 25565
-netsh advfirewall firewall add rule name="Minecraft Server" dir=in action=allow protocol=TCP localport=25565
+```powershell
+Set-Location -Path $PSScriptRoot
+# Ajusta Xms/Xmx según RAM disponible
+java -Xms2G -Xmx6G -jar .\server.jar nogui
 ```
 
-### 2. Configurar Router (si es necesario)
-- Accede a la configuración del router
-- Configura port forwarding para el puerto 25565
-- Asigna IP estática al servidor
+> Nota: Si usas más memoria, asegúrate de que la máquina tenga RAM disponible.
 
----
+## 7) Abrir puerto en Windows Firewall y permitir IPs específicas
 
-### CONFIGURACIÓN AVANZADA DEL SERVIDOR
+### Abrir puerto 25565 (permitir a todos)
 
-### 1. Configuración de Memoria
-```batch
-# Para servidores pequeños (1-5 jugadores)
-java -Xmx2G -Xms1G -jar server.jar nogui
+Ejecuta en PowerShell como administrador o CMD:
 
-# Para servidores medianos (5-15 jugadores)
-java -Xmx4G -Xms2G -jar server.jar nogui
-
-# Para servidores grandes (15+ jugadores)
-java -Xmx8G -Xms4G -jar server.jar nogui
+```powershell
+netsh advfirewall firewall add rule name="Minecraft TCP" dir=in action=allow protocol=TCP localport=25565
 ```
 
-### 2. Configuración de JVM Optimizada
-```batch
-java -Xmx4G -Xms2G -XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=200 -XX:+UnlockExperimentalVMOptions -XX:+DisableExplicitGC -XX:+AlwaysPreTouch -XX:G1NewSizePercent=30 -XX:G1MaxNewSizePercent=40 -XX:G1HeapRegionSize=8M -XX:G1ReservePercent=20 -XX:G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=5 -XX:SurvivorRatio=32 -XX:+PerfDisableSharedMem -XX:MaxTenuringThreshold=1 -jar server.jar nogui
+### Permitir solo IP(s) específicas (ejemplo: permitir 1.2.3.4)
+
+Si quieres permitir solo conexiones desde IPs concretas (y bloquear el resto), primero añade regla que permita sólo esas IPs y luego asegúrate de no tener otra regla general que permita 25565 a todo el mundo.
+
+```powershell
+# Permitir solo desde 1.2.3.4
+netsh advfirewall firewall add rule name="Minecraft From 1.2.3.4" dir=in action=allow protocol=TCP localport=25565 remoteip=1.2.3.4
+
+# Permitir desde varias IPs
+netsh advfirewall firewall add rule name="Minecraft From Office" dir=in action=allow protocol=TCP localport=25565 remoteip=1.2.3.4,5.6.7.8
 ```
 
----
+Si tienes una regla previa que permite todo, elimínala o desactívala:
 
-### COMANDOS DE ADMINISTRACIÓN
-
-### Comandos Básicos del Servidor
-```cmd
-# En la consola del servidor
-help                    # Lista todos los comandos disponibles
-list                    # Muestra jugadores conectados
-save-all               # Guarda el mundo
-stop                   # Detiene el servidor
-reload                 # Recarga configuraciones
+```powershell
+netsh advfirewall firewall delete rule name="Minecraft TCP"
 ```
 
-### Comandos de Información
-```cmd
-seed                   # Muestra la semilla del mundo
-time set day           # Cambia la hora a día
-time set night         # Cambia la hora a noche
-weather clear          # Despeja el clima
-weather rain           # Activa la lluvia
-weather thunder        # Activa tormenta
+> **Importante:** Este método filtra a nivel de Windows; si quieres filtrado por usuario/UUID usa whitelist en Minecraft o un plugin.
+
+## 8) Comandos de consola / juego (vanilla)
+
+Los comandos pueden ejecutarse desde la consola del servidor (la ventana donde corre `java`) o como operador en el juego (prefijo `/`). A continuación los comandos más útiles y su sintaxis.
+
+### Comandos generales del servidor
+
+* `stop` — Apaga el servidor de manera segura.
+* `save-all` — Guarda el mundo.
+* `save-off` / `save-on` — Desactivar/activar guardado automático.
+* `say <mensaje>` — Envía un mensaje a todos los jugadores desde la consola.
+
+### Gestión de jugadores (kick/ban/pardon)
+
+* `kick <player> [reason]` — Expulsa a un jugador inmediatamente.
+
+  * Ejemplo: `kick Yeremi Violación de reglas`.
+
+* `ban <player> [reason]` — Prohíbe el jugador por nombre/UUID (añade a `banned-players.json`).
+
+  * Ejemplo: `ban Troll123 Abuso de chat`.
+
+* `pardon <player>` — Quita el baneo por nombre/UUID.
+
+* `ban-ip <IP> [reason]` — Banea una dirección IP (añade a `banned-ips.json`).
+
+  * Ejemplo: `ban-ip 203.0.113.42 DDoS`.
+
+* `pardon-ip <IP>` — Quita baneo de IP.
+
+* `list` — Muestra jugadores conectados.
+
+* `whitelist on|off` — Activa/desactiva whitelist.
+
+* `whitelist add <player>` — Agrega jugador a whitelist.
+
+* `whitelist remove <player>` — Quita jugador de whitelist.
+
+* `whitelist list` — Lista jugadores en whitelist.
+
+* `whitelist reload` — Recarga la whitelist desde archivo.
+
+### Operators y permisos
+
+* `op <player>` — Da permisos de operador a un jugador (lo añade a `ops.json`).
+* `deop <player>` — Quita permisos de operador.
+
+### Otros comandos útiles
+
+* `gamemode <mode> [player]` — Cambia modo de juego (survival, creative, adventure, spectator).
+* `tp <player> <target>` — Teletransporta.
+* `time set <value>` — Ajusta la hora del mundo.
+* `difficulty <peaceful|easy|normal|hard>` — Cambia dificultad.
+
+## 9) Gestión de **whitelist** (detallado)
+
+La whitelist limita el acceso por **nombre/UUID** de jugador.
+
+**Activar la whitelist (consola):**
+
 ```
-
----
-
-### GESTIÓN DE JUGADORES
-
-### Comandos de Moderación
-```cmd
-# Kickear jugador
-kick <jugador> [razón]
-
-# Ejemplos:
-kick Steve
-kick Alex Te has portado mal
-```
-
-### Comandos de Ban
-```cmd
-# Banear jugador
-ban <jugador> [razón]
-
-# Desbanear jugador
-pardon <jugador>
-
-# Banear IP
-ban-ip <IP>
-
-# Desbanear IP
-pardon-ip <IP>
-
-# Lista de baneados
-banlist
-```
-
-### Comandos de Op (Operador)
-```cmd
-# Dar permisos de operador
-op <jugador>
-
-# Quitar permisos de operador
-deop <jugador>
-
-# Lista de operadores
-list ops
-```
-
-### Comandos de Gamemode
-```cmd
-# Cambiar modo de juego
-gamemode <modo> [jugador]
-
-# Modos disponibles:
-# survival, creative, adventure, spectator
-
-# Ejemplos:
-gamemode creative Steve
-gamemode survival @a
-```
-
-### Comandos de Teleportación
-```cmd
-# Teleportar jugador
-tp <jugador1> <jugador2>
-tp <jugador> <x> <y> <z>
-
-# Ejemplos:
-tp Steve Alex
-tp Steve 100 64 200
-```
-
----
-
-### CONFIGURACIÓN DE WHITELIST Y BLACKLIST
-
-### Whitelist (Lista Blanca)
-```cmd
-# Activar whitelist
 whitelist on
+```
 
-# Desactivar whitelist
-whitelist off
+**Agregar jugador por nombre:**
 
-# Agregar jugador a whitelist
-whitelist add <jugador>
+```
+whitelist add NombreJugador
+```
 
-# Remover jugador de whitelist
-whitelist remove <jugador>
+**Quitar jugador:**
 
-# Lista de jugadores en whitelist
+```
+whitelist remove NombreJugador
+```
+
+**Listar jugadores en whitelist:**
+
+```
 whitelist list
-
-# Recargar whitelist
-whitelist reload
 ```
 
-### Configuración en server.properties
-```properties
-# Activar whitelist
-white-list=true
+**Archivo:** `whitelist.json` contiene los UUID y nombres. Cuando `white-list=true` en `server.properties`, sólo esos entran.
 
-# Forzar whitelist (no permite jugadores no listados)
-enforce-whitelist=true
-```
+> Si necesitas controlar acceso por IP (en vez de nombre) usa `netsh advfirewall` o un plugin que acepte IPs.
 
-### Blacklist (Lista Negra)
-```cmd
-# Agregar a blacklist (ban permanente)
-ban <jugador> [razón]
+## 10) Ban / Kick / Ban-IP (detallado)
 
-# Agregar IP a blacklist
-ban-ip <IP>
-
-# Ver lista de baneados
-banlist
-```
-
-## Comandos Avanzados
-
-### Comandos de Mundo
-```cmd
-# Cambiar dificultad
-difficulty <nivel>
-# Niveles: peaceful, easy, normal, hard
-
-# Cambiar modo de juego por defecto
-defaultgamemode <modo>
-
-# Establecer spawn
-setworldspawn <x> <y> <z>
-```
-
-### Comandos de Chat
-```cmd
-# Enviar mensaje a todos
-say <mensaje>
-
-# Enviar mensaje a jugador específico
-tell <jugador> <mensaje>
-
-# Cambiar formato de chat
-gamerule sendCommandFeedback true
-```
-
-### Comandos de Reglas del Juego
-```cmd
-# Ver reglas del juego
-gamerule
-
-# Cambiar reglas
-gamerule <regla> <valor>
-
-# Ejemplos:
-gamerule keepInventory true
-gamerule doDaylightCycle false
-gamerule doMobSpawning false
-gamerule doFireTick false
-gamerule mobGriefing false
-```
-
----
-
-### AUTOMATIZACIÓN Y SCRIPTS
-
-### Script de Backup (backup.bat)
-```batch
-@echo off
-set BACKUP_DIR=C:\MinecraftBackups
-set SERVER_DIR=C:\MinecraftServer
-set DATE=%date:~-4,4%%date:~-10,2%%date:~-7,2%
-
-if not exist %BACKUP_DIR% mkdir %BACKUP_DIR%
-
-echo Creando backup...
-xcopy "%SERVER_DIR%\world" "%BACKUP_DIR%\world_%DATE%" /E /I /H /Y
-xcopy "%SERVER_DIR%\world_nether" "%BACKUP_DIR%\world_nether_%DATE%" /E /I /H /Y
-xcopy "%SERVER_DIR%\world_the_end" "%BACKUP_DIR%\world_the_end_%DATE%" /E /I /H /Y
-
-echo Backup completado: %DATE%
-```
-
-### Script de Reinicio Automático (restart.bat)
-```batch
-@echo off
-echo Reiniciando servidor en 10 segundos...
-timeout /t 10
-taskkill /f /im java.exe
-timeout /t 5
-start start.bat
-```
-
----
-
-### SOLUCIÓN DE PROBLEMAS
-
-### Problemas Comunes
-
-#### 1. Error "Java no reconocido"
-```cmd
-# Verificar instalación de Java
-java -version
-javac -version
-
-# Reinstalar Java si es necesario
-```
-
-#### 2. Puerto ya en uso
-```cmd
-# Verificar qué proceso usa el puerto 25565
-netstat -ano | findstr :25565
-
-# Terminar proceso si es necesario
-taskkill /PID <PID> /F
-```
-
-#### 3. Servidor no responde
-```cmd
-# Verificar memoria disponible
-wmic OS get TotalVisibleMemorySize,FreePhysicalMemory
-
-# Reducir memoria asignada si es necesario
-java -Xmx2G -Xms1G -jar server.jar nogui
-```
-
-#### 4. Jugadores no pueden conectarse
-- Verificar firewall
-- Verificar port forwarding
-- Verificar IP pública
-- Verificar que el servidor esté ejecutándose
-
-### Logs del Servidor
-```cmd
-# Ver logs en tiempo real
-type logs\latest.log
-
-# Buscar errores específicos
-findstr "ERROR" logs\latest.log
-findstr "WARN" logs\latest.log
-```
-
----
-
-### CONFIGURACIÓN DE PLUGINS (OPCIONAL)
-
-### Instalación de Bukkit/Spigot/Paper
-1. Descarga PaperMC desde [papermc.io](https://papermc.io)
-2. Reemplaza server.jar con paper.jar
-3. Reinicia el servidor
-
-### Plugins Recomendados
-- **EssentialsX**: Comandos básicos
-- **WorldGuard**: Protección de áreas
-- **LuckPerms**: Sistema de permisos
-- **Vault**: API de economía
-- **WorldEdit**: Edición de mundo
-
----
-
-### MANTENIMIENTO DEL SERVIDOR
-
-### Tareas Regulares
-1. **Backups diarios** del mundo
-2. **Actualización de Java** cuando sea necesario
-3. **Monitoreo de rendimiento**
-4. **Limpieza de logs antiguos**
-5. **Actualización del servidor** a nuevas versiones
-
-### Comandos de Mantenimiento
-```cmd
-# Limpiar memoria
-gc
-
-# Ver estadísticas del servidor
-tps
-
-# Forzar guardado
-save-all flush
-```
-
----
-
-### COMANDOS ÚTILES PARA LA CONSOLA DEL SERVIDOR
-
-```cmd
-# Comandos básicos del servidor
-help                    # Lista todos los comandos disponibles
-list                    # Muestra jugadores conectados
-save-all               # Guarda el mundo
-stop                   # Detiene el servidor
-reload                 # Recarga configuraciones
-
-# Comandos de moderación
-kick <jugador> [razón]  # Expulsar jugador
-ban <jugador> [razón]   # Banear jugador
-pardon <jugador>        # Desbanear jugador
-op <jugador>            # Dar permisos de operador
-deop <jugador>          # Quitar permisos de operador
-
-# Comandos de mundo
-gamemode <modo> [jugador]  # Cambiar modo de juego
-tp <jugador> <x> <y> <z>   # Teleportar jugador
-time set day               # Cambiar hora a día
-weather clear              # Despejar clima
-```
-
----
-
-### CONECTARSE A TU SERVIDOR
-
-Para que otros jugadores se conecten a tu servidor, deben ingresar la IP pública seguida del puerto 25565 en la consola del juego Minecraft:
+**Kick:**
 
 ```
-connect 205.125.85.66:25565
+kick Jugador Motivo opcional
 ```
 
-📌 *Reemplaza el ejemplo con tu propia IP pública.*
-
----
-
-### ¿CÓMO SABER TU IP PÚBLICA?
-
-Puedes consultar tu IP pública en el siguiente sitio web:
+**Ban por nombre/UUID:**
 
 ```
-https://canyouseeme.org/
+ban Jugador Motivo opcional
 ```
 
----
+**Quitar ban:**
 
-### VISIBILIDAD DEL SERVIDOR
+```
+pardon Jugador
+```
 
-Si tu servidor no tiene whitelist activada, podría aparecer automáticamente en la lista pública de servidores, permitiendo que cualquier jugador se una libremente.
+**Ban por IP:**
 
----
+```
+ban-ip 203.0.113.42 Motivo
+```
 
-¡Disfruta administrando tu servidor de Minecraft en Windows! 🎮⛏️
+**Quitar ban IP:**
+
+```
+pardon-ip 203.0.113.42
+```
+
+> Los bans por IP bloquean la IP completa. Ten cuidado con IPs dinámicas compartidas.
+
+## 11) Operators (ops) y permisos
+
+**Dar operador (desde consola o archivo):**
+
+```
+op NombreJugador
+```
+
+**Quitar operador:**
+
+```
+deop NombreJugador
+```
+
+`ops.json` también puede configurarse manualmente con nivel de permiso (1-4) en servidores que lo soporten.
+
+## 12) Plugins útiles (si usas Paper/Spigot)
+
+Si quieres control por IP o más opciones de administración, instala **Paper** o **Spigot** y plugins como:
+
+* `EssentialsX` — Comandos administrativos extendidos (`/banip`, `/tempban`, `/kick`, `/mute`, etc.).
+* `LuckPerms` — Sistema de permisos avanzado.
+* `IPWhitelist` / `AdvancedBan` — Plugins para control más fino por IP y bans avanzados.
+
+Instalar plugins: coloca los `.jar` en la carpeta `plugins` y reinicia el servidor.
+
+## 13) Copias de seguridad y mantenimiento
+
+* Haz backups completos de la carpeta `world` periódicamente.
+* Antes de actualizar servidor/plugin, crear backup.
+* Ejecuta `save-all` y luego copia la carpeta para evitar corrupción.
+
+Script rápido para backup (PowerShell):
+
+```powershell
+# backup.ps1
+$fecha = Get-Date -Format "yyyyMMdd-HHmmss"
+$origen = "C:\mc-server"
+$destino = "D:\backups\mc-server-$fecha.zip"
+Compress-Archive -Path $origen -DestinationPath $destino -Force
+```
+
+## 14) Ejemplos prácticos y atajos
+
+* **Expulsar y banear IP maliciosa:**
+
+  1. `kick NombreJugador Attacking players`
+  2. `ban NombreJugador Abuso`
+  3. `ban-ip 203.0.113.42 DDoS` (o usar netsh para bloquear a nivel Windows)
+
+* **Activar whitelist y dejar sólo a 2 jugadores:**
+
+  ```
+  whitelist add Jugador1
+  whitelist add Jugador2
+  whitelist on
+  ```
+
+* **Permitir solo IP privada de tu oficina (192.0.2.5) para conectar:**
+
+  ```powershell
+  # eliminar regla amplia si existe
+  netsh advfirewall firewall delete rule name="Minecraft TCP"
+  # permitir solo IP concreta
+  netsh advfirewall firewall add rule name="Minecraft From Office" dir=in action=allow protocol=TCP localport=25565 remoteip=192.0.2.5
+  ```
