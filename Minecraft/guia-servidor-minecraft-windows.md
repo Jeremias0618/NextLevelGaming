@@ -107,6 +107,311 @@ enable-query=false
 enable-rcon=false
 ```
 
+---
+
+## CONFIGURACIÓN DETALLADA DE SERVER.PROPERTIES
+
+### Configuración Básica del Servidor
+```properties
+# Nombre del servidor (no afecta la funcionalidad)
+server-name=Mi Servidor Minecraft
+
+# Mensaje del día (MOTD) - aparece en la lista de servidores
+motd=¡Bienvenido a mi servidor!
+
+# Puerto del servidor (por defecto 25565)
+server-port=25565
+
+# Número máximo de jugadores conectados simultáneamente
+max-players=20
+```
+
+### Configuración de Juego
+```properties
+# Dificultad del juego
+# Valores: peaceful, easy, normal, hard
+difficulty=normal
+
+# Modo de juego por defecto para nuevos jugadores
+# Valores: survival, creative, adventure, spectator
+gamemode=survival
+
+# Si el servidor está en modo hardcore (una vida)
+# true = hardcore, false = normal
+hardcore=false
+
+# Si los jugadores pueden atacarse entre sí
+pvp=true
+
+# Si los jugadores pueden volar (modo creativo)
+allow-flight=false
+
+# Si se fuerza el modo de juego especificado
+force-gamemode=false
+```
+
+### Configuración de Red y Seguridad
+```properties
+# Verificación de cuentas premium de Minecraft
+# true = solo jugadores con cuenta premium, false = permite piratas
+online-mode=true
+
+# Lista blanca de jugadores
+# true = solo jugadores en whitelist pueden entrar
+white-list=false
+
+# Si se aplica la whitelist estrictamente
+enforce-whitelist=false
+
+# Límite de conexiones por segundo por IP
+# 0 = sin límite
+rate-limit=0
+```
+
+### Configuración de Mundo
+```properties
+# Nombre de la carpeta del mundo principal
+level-name=world
+
+# Semilla del mundo (dejar vacío para aleatoria)
+level-seed=
+
+# Tipo de generación del mundo
+# Valores: minecraft:normal, minecraft:flat, minecraft:large_biomes, minecraft:amplified
+level-type=minecraft:normal
+
+# Configuración personalizada del generador (JSON)
+generator-settings={}
+
+# Si se permite el acceso al Nether
+allow-nether=true
+
+# Formato de guardado del mundo
+# Valores: default, legacy
+level-format=default
+```
+
+### Configuración de Spawn y Mobs
+```properties
+# Si aparecen NPCs (aldeanos, etc.)
+spawn-npcs=true
+
+# Si aparecen animales
+spawn-animals=true
+
+# Si aparecen monstruos
+spawn-monsters=true
+
+# Coordenadas del spawn del mundo (x,y,z)
+# Dejar vacío para usar el spawn por defecto
+spawn-protection=16
+```
+
+### Configuración de Comandos y Permisos
+```properties
+# Si están habilitados los bloques de comando
+enable-command-block=false
+
+# Nivel de permisos para operadores
+# 1-4, donde 4 es el más alto
+op-permission-level=4
+
+# Nivel de permisos para funciones
+# 1-4, donde 4 es el más alto
+function-permission-level=2
+```
+
+### Configuración de RCON (Control Remoto)
+```properties
+# Habilitar RCON para control remoto
+enable-rcon=false
+
+# Puerto para RCON
+rcon.port=25575
+
+# Contraseña para RCON (cambiar por seguridad)
+rcon.password=
+```
+
+### Configuración de Rendimiento
+```properties
+# Tiempo máximo por tick en milisegundos
+# Si se excede, el servidor se reinicia
+max-tick-time=60000
+
+# Si se sincronizan las escrituras de chunks
+sync-chunk-writes=true
+
+# Distancia de simulación (chunks)
+# Valores: 4-32, menor = mejor rendimiento
+simulation-distance=10
+
+# Porcentaje del rango de transmisión de entidades
+# 100 = rango completo, menor = mejor rendimiento
+entity-broadcast-range-percentage=100
+```
+
+### Configuración de Monitoreo
+```properties
+# Habilitar monitoreo JMX
+enable-jmx-monitoring=false
+
+# Habilitar consultas de estado
+enable-query=false
+
+# Habilitar estado del servidor
+enable-status=true
+
+# Si se envían datos de uso a Mojang
+snooper-enabled=true
+```
+
+### Configuración de Chat y Mensajes
+```properties
+# Si se transmiten mensajes de consola a operadores
+broadcast-console-to-ops=true
+
+# Si se envía feedback de comandos
+send-command-feedback=true
+```
+
+### Configuración de Resource Packs
+```properties
+# URL del resource pack (opcional)
+resource-pack=
+
+# Hash SHA1 del resource pack (opcional)
+resource-pack-sha1=
+
+# Nivel de compresión del pack (1-9)
+pack-compression-level=3
+
+# Si se requiere el resource pack
+require-resource-pack=false
+```
+
+### Configuración de Redstone
+```properties
+# Si se procesan las actualizaciones de redstone
+# false puede mejorar rendimiento pero rompe redstone
+redstone-enabled=true
+```
+
+### Ejemplo de Configuración Completa
+```properties
+# Configuración básica
+server-name=Mi Servidor Minecraft
+motd=¡Bienvenido a mi servidor!
+server-port=25565
+max-players=20
+
+# Configuración de juego
+difficulty=normal
+gamemode=survival
+hardcore=false
+pvp=true
+allow-flight=false
+force-gamemode=false
+
+# Configuración de red
+online-mode=true
+white-list=false
+enforce-whitelist=false
+rate-limit=0
+
+# Configuración de mundo
+level-name=world
+level-seed=
+level-type=minecraft:normal
+generator-settings={}
+allow-nether=true
+level-format=default
+
+# Configuración de spawn
+spawn-npcs=true
+spawn-animals=true
+spawn-monsters=true
+spawn-protection=16
+
+# Configuración de comandos
+enable-command-block=false
+op-permission-level=4
+function-permission-level=2
+
+# Configuración de RCON
+enable-rcon=false
+rcon.port=25575
+rcon.password=
+
+# Configuración de rendimiento
+max-tick-time=60000
+sync-chunk-writes=true
+simulation-distance=10
+entity-broadcast-range-percentage=100
+
+# Configuración de monitoreo
+enable-jmx-monitoring=false
+enable-query=false
+enable-status=true
+snooper-enabled=true
+
+# Configuración de chat
+broadcast-console-to-ops=true
+send-command-feedback=true
+
+# Configuración de resource packs
+resource-pack=
+resource-pack-sha1=
+pack-compression-level=3
+require-resource-pack=false
+
+# Configuración de redstone
+redstone-enabled=true
+```
+
+### Consejos de Configuración
+
+#### Para Servidores Públicos
+```properties
+# Configuración recomendada para servidores públicos
+online-mode=true
+white-list=false
+pvp=true
+allow-flight=false
+enable-command-block=false
+op-permission-level=2
+```
+
+#### Para Servidores Privados
+```properties
+# Configuración recomendada para servidores privados
+online-mode=false
+white-list=true
+pvp=false
+allow-flight=true
+enable-command-block=true
+op-permission-level=4
+```
+
+#### Para Mejor Rendimiento
+```properties
+# Configuración para mejor rendimiento
+simulation-distance=8
+entity-broadcast-range-percentage=80
+sync-chunk-writes=false
+snooper-enabled=false
+```
+
+#### Para Servidores de Construcción
+```properties
+# Configuración para servidores de construcción
+gamemode=creative
+allow-flight=true
+pvp=false
+spawn-monsters=false
+difficulty=peaceful
+```
+
 ### 3. Script de Inicio (start.bat)
 ```batch
 @echo off
